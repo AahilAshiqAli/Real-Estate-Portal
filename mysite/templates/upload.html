@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Property Upload |{% endblock title %}
+{% block body %}
+
+<div class = "container my-5 bg-light px-5 py-5 border border-secondary rounded p-4">
+    <form method = "post" action = "/upload">
+    {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail4">Email</label>
+            <input type="email" class="form-control" id="inputEmail4" name = "email">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Password</label>
+            <input type="password" class="form-control" id="inputPassword4" name = "password">
+          </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-9">
+            <label for="inputAddress">Address</label>
+            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name = "address">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputAddress">Price</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="Rs 100,000" name = "price">
+                </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputAddress">Phone</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="0315-2349087" name = "phone">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputAddress">Bedroom</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="4" name = "bedroom">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputAddress">Bath</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="4" name = "bath">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputAddress">Bath</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="4" name = "size">
+            </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputCity">City</label>
+            <input type="text" class="form-control" id="inputCity" name = "city">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputState">State</label>
+            <select id="inputState" class="form-control" name = "state">
+              <option selected>Choose...</option>
+              <option>Sindh</option>
+              <option>Punjab</option>
+              <option>Balochistan</option>
+              <option>KPK</option>
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="inputZip">Zip</label>
+            <input type="text" class="form-control" id="inputZip" name = "zipcode">
+          </div>
+        </div>
+        <div class="form-row  my-3">
+            <div class = "form-group col-md-6">
+                <label for="exampleFormControlFile1">House file picture</label>
+                <input type="file" class="form-control-file" id="exampleFormControlFile1" name = "link">
+            </div>
+            <div class = "form-group col-md-6">
+                <button type="submit" class= "btn btn-primary btn-lg">Submit</button>
+            <div>
+        <div>
+      </form>
+    </div>
+
+{% endblock body %}
