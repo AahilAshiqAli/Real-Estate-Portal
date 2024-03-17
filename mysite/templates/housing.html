@@ -16,6 +16,7 @@
     <img src={% static "/static/search.jpg" %} class="d-block w-100" style="max-height: 500px;">
 
     <form method="post" action="/housing" class = "container-rounded bg-light p-2 m-0">
+        {% csrf_token %}
         <div class="d-flex justify-content-center">
             <div class="col-md-6 col-lg-2 d-flex align-items-center">
                 <div class="form-group">

@@ -13,9 +13,17 @@ def housing(request):
         city = request.POST.get('city')
         bedroom = request.POST.get('bedroom')
         bath = request.POST.get('bath')
-
-         
-    query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where bedrooms = 2 and baths = 2 and city = \'Lahore\'')
+        
+        if bedroom.isdigit() and bath.isdigit(): 
+            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where bedrooms = 2 and baths = 2 and city = \'Lahore\'')
+        if bedroom.isdigit(): 
+            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where bedrooms = 2 and city = \'Lahore\'')
+        if bath.isdigit(): 
+            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where baths = 2 and city = \'Lahore\'')
+            
+    else:
+        query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce limit 9')
+        
     return render(request,'housing.html',{'query' : query})
 
 def commercial(request):
