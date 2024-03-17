@@ -9,7 +9,14 @@ def index(request):
     return render(request,'index.html',{'data' : query})
 
 def housing(request):
-    return render(request,'housing.html')
+    if request.method == "POST":
+        city = request.POST.get('city')
+        bedroom = request.POST.get('bedroom')
+        bath = request.POST.get('bath')
+
+         
+    query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where bedrooms = 2 and baths = 2 and city = \'Lahore\'')
+    return render(request,'housing.html',{'query' : query})
 
 def commercial(request):
     return render(request,'commercial.html')
@@ -31,12 +38,11 @@ def upload(request):
         
         contact = Contact(email = email, password = password, phone = phone, address = address, city = city, state = state, zipcode = zipcode, profile_picture = link, date = datetime.today())
         elite = EliteEstateRoyce(city = city, location = address, price = price, bedrooms =  bedroom, baths = bath, size = size)
-        try:
-            contact.save()
-            elite.save()
-            messages.success(request,'Property details uploaded')
-        except:
-           messages.error(request,"You should check in some of the fields below") 
+        
+        contact.save()
+        elite.save()
+        messages.success(request,'Property details uploaded')
+        #messages.error(request,"You should check in some of the fields below") 
         
     return render(request,'upload.html')
 
