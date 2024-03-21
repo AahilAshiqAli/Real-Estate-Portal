@@ -3,10 +3,24 @@ from datetime import datetime
 from polls.models import Contact,EliteEstateRoyce
 from django.contrib import messages
 
+
 # Create your views here.
 def index(request):
     query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce limit 9')
     return render(request,'index.html',{'data' : query})
+
+
+def login(request):
+    if request.method == 'GET':
+        if 'login' in request.GET:
+            return render(request,'login.html',{'q' : True})
+        elif 'login' in request.GET:
+            return render(request,'login.html',{'q' : False})
+        
+    return render(request,'login.html')
+
+def logout(request):
+    return render(request,'index.html')
 
 def housing(request):
     if request.method == "POST":
@@ -15,14 +29,16 @@ def housing(request):
         bath = request.POST.get('bath')
         
         if bedroom.isdigit() and bath.isdigit(): 
-            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where bedrooms = 2 and baths = 2 and city = \'Lahore\'')
-        if bedroom.isdigit(): 
-            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where bedrooms = 2 and city = \'Lahore\'')
-        if bath.isdigit(): 
-            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where baths = 2 and city = \'Lahore\'')
+            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where bedrooms = ' + bedroom + ' and baths = ' + bath + ' and city = \''+city+'\' limit 12')
+        elif bath.isdigit(): 
+            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where baths = ' + bath + ' and city = \''+city+'\' limit 12')
+        elif bedroom.isdigit(): 
+            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where bedrooms = ' + bedroom + ' and city = \''+city+'\' limit 12')
+        else:
+            query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce where city = \''+city+'\' limit 12')
             
     else:
-        query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce limit 9')
+        query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce limit 12')
         
     return render(request,'housing.html',{'query' : query})
 

@@ -11,5 +11,6 @@ urlpatterns = [
     path('housing',views.housing,name='housing'),
     path('commercial',views.commercial, name="commercial"),
     path('upload',views.upload,name='upload'),
-    path('contact',views.contact,name='contact')
+    path('contact',views.contact,name='contact'),
+    path('login',views.login,name = 'login')
 ]
