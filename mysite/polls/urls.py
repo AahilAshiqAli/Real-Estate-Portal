@@ -12,5 +12,5 @@ urlpatterns = [
     path('commercial',views.commercial, name="commercial"),
     path('upload',views.upload,name='upload'),
     path('contact',views.contact,name='contact'),
-    path('login',views.login,name = 'login')
+    path('login',views.loginUser,name = 'login')
 ]

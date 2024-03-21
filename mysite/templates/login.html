@@ -290,22 +290,24 @@ html {
         {% if q %}
             <h1>Login</h1>
         {% else %}
-            Register
+            <h1>Register</h1>
         {% endif %}
         </div>
         <div class="fadeIn first">
         <img src="/static/logo/logo.png" id="icon" alt="User Icon" />
         </div>
         {% if q %}
-        <form>
-        <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-        <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+        <form method = "post" action = "/login">
+          {% csrf_token %}
+        <input type="text" id="login" class="fadeIn second" name="email" placeholder="email">
+        <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">
         <input type="submit" class="fadeIn fourth" value="Log In">
         </form>
         {% else%}
-        <form>
+        <form method = "post" action = "/login">
+          {% csrf_token %}
         <input type="text" id="login" class="fadeIn second" name="username" placeholder="username">
-        <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
+        <input type="text" id="login" class="fadeIn second" name="login" placeholder="email">
         <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">  
         <input type="text" id="password" class="fadeIn third" name="confirm password" placeholder="confirm password">
         <input type="submit" class="fadeIn fourth" value="Log In">

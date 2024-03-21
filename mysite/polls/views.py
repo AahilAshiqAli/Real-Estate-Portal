@@ -1,26 +1,45 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from datetime import datetime
 from polls.models import Contact,EliteEstateRoyce
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, logout, login
 
 
 # Create your views here.
 def index(request):
+    if request.user.is_anonymous:
+        return redirect("/login")
     query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce limit 9')
     return render(request,'index.html',{'data' : query})
 
 
-def login(request):
+def loginUser(request):
     if request.method == 'GET':
         if 'login' in request.GET:
             return render(request,'login.html',{'q' : True})
-        elif 'login' in request.GET:
+        elif 'request' in request.GET:
             return render(request,'login.html',{'q' : False})
-        
-    return render(request,'login.html')
+        else:
+            return render(request,'login.html')
+    
+    elif request.method == 'POST':
+        # check if user is logged in    
+        user1 = request.POST.get('email')
+        pass1 = request.POST.get('password')
+        user = authenticate(username=user1, password=pass1)
+        if user is not None:
+            # A backend authenticated the credentials
+            login(request,user)
+            return redirect("/")
+        else:
+            # No backend authenticated the credentials
+            print(user)
+            return render(request,'login.html')
 
-def logout(request):
-    return render(request,'index.html')
+def logoutUser(request):
+    logout(request)
+    return redirect('/login')
 
 def housing(request):
     if request.method == "POST":
