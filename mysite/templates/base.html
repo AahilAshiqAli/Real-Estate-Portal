@@ -40,11 +40,19 @@
             </li>
           </ul>
           <form class="form-inline my-2 my-lg-2">
+            {% if username %}
+            <a class="nav-link" href="{% url 'logout' %}">
+              <div class="btn btn-outline-success my-2 my-sm-0">
+                <b>Welcome {{username}}!</b><br><b>Click for Logout</b>
+              </div>
+            </a>
+            {% else %}
             <a class="nav-link" href="{% url 'login' %}">
               <div class="btn btn-outline-success my-2 my-sm-0">
                 <b>Register</b> or <b>Sign In</b>
               </div>
             </a>
+            {% endif %}
           </form>
         </div>
       </nav>

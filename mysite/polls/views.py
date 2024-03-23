@@ -1,17 +1,64 @@
 from django.shortcuts import render,redirect
+from django.http import HttpResponse
 from datetime import datetime
 from polls.models import Contact,EliteEstateRoyce
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
+from email_validator import validate_email,EmailNotValidError
 
 
+
+
+def is_valid_email(email):
+    try:
+        # Validate.
+        valid = validate_email(email)
+        # Update with the normalized form.
+        email = valid.email
+        return True
+    except EmailNotValidError as e:
+        # Email is not valid, exception message is human-readable
+        return False
+
+
+
+
+
+
+
+
+#..................................................................................................................
+
+    
+    
+    
+    
+    
+    
 # Create your views here.
 def index(request):
-    if request.user.is_anonymous:
-        return redirect("/login")
     query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce limit 9')
-    return render(request,'index.html',{'data' : query})
+    q = {'data' : query}
+    if request.user.is_anonymous:
+        q['user'] = False
+    else:
+        q['user'] = True
+        q['username'] = request.user.username
+   
+    return render(request,'index.html',q)
+
+
+
+
+
+
+
+#..................................................................................................................
+
+
+
+
 
 
 def loginUser(request):
@@ -24,10 +71,32 @@ def loginUser(request):
             return render(request,'login.html')
     
     elif request.method == 'POST':
-        # check if user is logged in    
-        user1 = request.POST.get('email')
-        pass1 = request.POST.get('password')
-        user = authenticate(username=user1, password=pass1)
+
+        if 'confirm password' in request.POST:
+            username = request.POST['username']
+            email = request.POST['login']  # Assuming this is intended to be the email.
+            password = request.POST['password']
+            confirm_password = request.POST['confirm password']
+            
+            # Simple validation example
+            if password == confirm_password and is_valid_email(email):
+                # Create the user and log them in, etc.
+                user = User.objects.create_user(username, email, password)
+                user.save()
+                
+            else:
+                # make error that user exists
+                if is_valid_email(email):
+                    return HttpResponse('Invalid email credentials')
+                
+                else:
+                    return HttpResponse('Passwords dont match')
+        else:
+            # check if user is logged in    
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            
+        user = authenticate(email=email, password=password)
         if user is not None:
             # A backend authenticated the credentials
             login(request,user)
@@ -37,11 +106,49 @@ def loginUser(request):
             print(user)
             return render(request,'login.html')
 
+
+
+
+
+#..................................................................................................................
+
+
+
+
+
+
+
+
 def logoutUser(request):
     logout(request)
     return redirect('/login')
 
+
+
+
+
+
+
+
+
+
+
+
+#..................................................................................................................
+
+
+
+
+
+
+
 def housing(request):
+    q = {}
+    if request.user.is_anonymous:
+        q['user'] = False
+    else:
+        q['user'] = True
+        q['username'] = request.user.username
     if request.method == "POST":
         city = request.POST.get('city')
         bedroom = request.POST.get('bedroom')
@@ -59,12 +166,68 @@ def housing(request):
     else:
         query = EliteEstateRoyce.objects.raw('SELECT * FROM elite_estate_royce limit 12')
         
-    return render(request,'housing.html',{'query' : query})
+    q['query'] = query 
+    return render(request,'housing.html',q)
+
+
+
+
+
+
+
+#..................................................................................................................
+
+
+
+
+
+
+def details(request,house_id):
+    q = {}
+    if request.user.is_anonymous:
+        redirect('/login')
+    q['username'] = request.user.username
+    query = EliteEstateRoyce.objects.raw('select * from elite_estate_royce where id = '+str(house_id) + ' limit 1')
+    q['query'] = query
+    return render(request,'details.html',q)
+#.....................................................................................................................
+
+
+
+
+
+
+
 
 def commercial(request):
     return render(request,'commercial.html')
 
+
+
+
+
+
+
+
+
+#..................................................................................................................
+
+
+
+
+
+
+
+
+
+
 def upload(request):
+    q={}
+    if request.user.is_anonymous:
+        redirect("/login")
+    else:
+        q['user'] = True
+        q['username'] = request.user.username
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -87,9 +250,29 @@ def upload(request):
         messages.success(request,'Property details uploaded')
         #messages.error(request,"You should check in some of the fields below") 
         
-    return render(request,'upload.html')
+    return render(request,'upload.html',q)
+
+
+
+
+
+
+
+#..................................................................................................................
+
+
+
+
+
+
 
 def contact(request):
     # if post request aarahi hai tau database mei store kardo
-    return render(request,'contact.html')
+    q = {}
+    if request.user.is_anonymous:
+        q['user'] = False
+    else:
+        q['user'] = True
+        q['username'] = request.user.username
+    return render(request,'contact.html',q)
 
